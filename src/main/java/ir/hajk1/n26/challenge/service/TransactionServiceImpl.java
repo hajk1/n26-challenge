@@ -28,7 +28,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     //todo k1: Is it really necessary to be synchronized?
-    private void addTransaction(Transaction transaction) {
+    private synchronized void addTransaction(Transaction transaction) {
         List<Double> transactionAtGivenTime = transactionMap.get(transaction.getTimestamp());
         if (transactionAtGivenTime == null)
             transactionAtGivenTime = new ArrayList<>();

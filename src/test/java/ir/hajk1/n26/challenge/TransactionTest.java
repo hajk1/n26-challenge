@@ -2,6 +2,7 @@ package ir.hajk1.n26.challenge;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,14 +51,15 @@ public class TransactionTest {
 
     @Test
     public void shouldHandleInvalidTimestampException() throws Exception {
-        doThrow(new RuntimeException("Just for test"))
-            .when(transactionService).persist(any(Transaction.class));
+//        doThrow(new RuntimeException("Just for test"))
+//            .when(transactionService).persist(any(Transaction.class));
 
         mvc.perform(post("/transactions")
                 .contentType("application/json")
                 .content("{\"amount\": 12.3,\"timestamp\": 1478192204000}"))
                 .andExpect(status().isNoContent())
                 .andExpect(content().bytes(new byte[0]));
+//    verify(transactionService).persist(new Transaction(12.3, 1478192204000L));
     }
 
 }
