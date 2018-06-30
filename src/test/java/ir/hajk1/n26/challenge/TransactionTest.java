@@ -1,7 +1,15 @@
 package ir.hajk1.n26.challenge;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import ir.hajk1.n26.challenge.controller.TransactionController;
+import ir.hajk1.n26.challenge.model.Transaction;
 import ir.hajk1.n26.challenge.service.TransactionService;
+import java.time.Instant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +17,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.Instant;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Created by k1 on 6/29/18.
@@ -28,14 +30,8 @@ public class TransactionTest {
     @MockBean
     private TransactionService transactionService;
 
-//    @Before
-//    public void setUp() throws Exception {
-//        WithinLastMinuteValidator.CURRENT_MILLIS = () -> 1478192205010L;
-//    }
-
-
     @Test
-    public void shouldAcceptValidRequest() throws Exception {
+    public void acceptValidRequest() throws Exception {
         mvc.perform(post("/transactions")
                 .contentType("application/json")
                 .content("{\"amount\": 12.3,\"timestamp\": " + Instant.now().toEpochMilli() + "}"))
@@ -43,21 +39,19 @@ public class TransactionTest {
                 .andExpect(content().bytes(new byte[0]));
     }
 
-//    @Test
-//    public void shouldValidateRequest() throws Exception {
-//        mvc.perform(post("/transactions")
-//                .contentType("application/json")
-//                .content("{\"timestamp\": 0}"))
-//                .andExpect(status().isNoContent())
-//                .andExpect(content().bytes(new byte[0]));
-//
-//        verifyZeroInteractions(statisticsService);
-//    }
+    @Test
+    public void validateRequest() throws Exception {
+        mvc.perform(post("/transactions")
+            .contentType("application/json")
+            .content("{\"timestamp\": 0}"))
+            .andExpect(status().isNoContent())
+            .andExpect(content().bytes(new byte[0]));
+    }
 
     @Test
     public void shouldHandleInvalidTimestampException() throws Exception {
-//        doThrow(new InvalidTimestampException(""))
-//                .when(statisticsService).record(any(Transaction.class));
+        doThrow(new RuntimeException("Just for test"))
+            .when(transactionService).persist(any(Transaction.class));
 
         mvc.perform(post("/transactions")
                 .contentType("application/json")
