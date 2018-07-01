@@ -1,9 +1,10 @@
 package ir.hajk1.n26.challenge.service;
 
 import ir.hajk1.n26.challenge.model.Transaction;
-import java.util.List;
-import java.util.concurrent.ConcurrentNavigableMap;
+
 import javax.validation.Valid;
+import java.util.List;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by k1 on 6/29/18.
@@ -12,5 +13,6 @@ import javax.validation.Valid;
 public interface TransactionService {
     void persist(@Valid Transaction transaction);
 
-  ConcurrentNavigableMap<Long, List<Double>> getTransactionMap();
+    ConcurrentMap<Long, List<Double>> getTransactionMap();
+
 }
