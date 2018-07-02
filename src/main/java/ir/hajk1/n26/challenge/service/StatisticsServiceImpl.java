@@ -1,14 +1,14 @@
 package ir.hajk1.n26.challenge.service;
 
+import ir.hajk1.n26.challenge.model.TransactionAmountListPerSecond;
+import java.util.Arrays;
+import java.util.DoubleSummaryStatistics;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.DoubleSummaryStatistics;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by k1 on 6/30/18.
@@ -26,12 +26,20 @@ public class StatisticsServiceImpl implements StatisticService {
     this.transactionService = transactionService;
   }
 
+  /**
+   * Used for generating statistics
+   *
+   * @return DoubleSummaryStatistics which contains desired information
+   */
   @Override
   public DoubleSummaryStatistics getStatistics() {
-    List<Double> validTransactions = transactionService.getTransactionMap()
-        .values().stream()
-        .flatMap(Collection::stream)
+    List<TransactionAmountListPerSecond> list = Arrays
+        .asList(transactionService.getTransactionAmountListPerSeconds());
+    List<Double> validTransactions = list.stream()
+        .flatMap(f -> f.getAmountList()
+            .stream())
         .collect(Collectors.toList());
+
     if (validTransactions == null || validTransactions.isEmpty()) {
       return null;
     }

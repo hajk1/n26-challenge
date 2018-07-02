@@ -26,6 +26,11 @@ public class StatisticsController {
     this.mapper = mapper;
   }
 
+  /**
+   * Generates summary of current minute transaction amounts
+   *
+   * @return ObjectNode beacuase avg 'field' is different from 'Average' field in  DoubleSummaryStatistics
+   */
   @GetMapping(produces = "application/json")
   public ObjectNode getTransactionStatistics() {
     DoubleSummaryStatistics summaryStatistics = statisticService.getStatistics();
