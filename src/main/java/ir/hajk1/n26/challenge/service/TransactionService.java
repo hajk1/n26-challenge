@@ -1,8 +1,7 @@
 package ir.hajk1.n26.challenge.service;
 
 import ir.hajk1.n26.challenge.model.Transaction;
-import java.util.List;
-import java.util.concurrent.ConcurrentMap;
+import ir.hajk1.n26.challenge.model.TransactionAmountListPerSecond;
 import javax.validation.Valid;
 
 /**
@@ -10,8 +9,9 @@ import javax.validation.Valid;
  * email:<k1.tehrani@gmail.com>
  */
 public interface TransactionService {
-    void persist(@Valid Transaction transaction);
 
-    ConcurrentMap<Byte, List<Double>> getTransactionMap();
+  void persist(@Valid Transaction transaction);
+
+  TransactionAmountListPerSecond[] getTransactionAmountListPerSeconds();
 
 }
