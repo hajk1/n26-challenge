@@ -2,15 +2,16 @@ package ir.hajk1.n26.challenge.service;
 
 import ir.hajk1.n26.challenge.model.Transaction;
 import ir.hajk1.n26.challenge.model.TransactionAmountListPerSecond;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import javax.validation.Valid;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 
 /**
  * Created by k1 on 6/29/18.
@@ -38,9 +39,10 @@ public class TransactionServiceImpl implements TransactionService {
 
   private void addTransaction(Transaction transaction) {
     byte second = extractSecondPortion(transaction.getTimestamp());
-    synchronized (transactionAmountListPerSeconds[second]) {
-      transactionAmountListPerSeconds[second].getAmountList().add(transaction.getAmount());
-    }
+      transactionAmountListPerSeconds[second].addNewTransaction(transaction.getAmount());
+//    synchronized (transactionAmountListPerSeconds[second]) {
+//      transactionAmountListPerSeconds[second].getAmountList().add(transaction.getAmount());
+//    }
   }
 
   /**

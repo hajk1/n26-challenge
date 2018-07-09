@@ -11,6 +11,9 @@ import java.util.List;
 public class TransactionAmountListPerSecond {
 
   private List<Double> amountList = new ArrayList<>();
+    private Double totalAmountPerSecond;
+    private Double minAmountPerSecond;
+    private Double maxAmountPerSecond;
 
   public List<Double> getAmountList() {
     return amountList;
@@ -19,4 +22,12 @@ public class TransactionAmountListPerSecond {
   public void setAmountList(List<Double> amountList) {
     this.amountList = amountList;
   }
+
+    synchronized public void addNewTransaction(Double newAmount) {
+        totalAmountPerSecond += newAmount;
+        if (newAmount > maxAmountPerSecond)
+            maxAmountPerSecond = newAmount;
+        if (newAmount < minAmountPerSecond)
+            minAmountPerSecond = newAmount;
+    }
 }
