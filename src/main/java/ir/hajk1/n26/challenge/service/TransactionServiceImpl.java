@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 
 /**
  * Created by k1 on 6/29/18.
@@ -71,7 +70,7 @@ public class TransactionServiceImpl implements TransactionService {
   public void expireCacheCron() {
     byte currentSecond = (byte) LocalDateTime.now().getSecond();
     synchronized (transactionAmountListPerSeconds[currentSecond]) {
-      transactionAmountListPerSeconds[currentSecond].setAmountList(new ArrayList<>());
+      transactionAmountListPerSeconds[currentSecond].reset();
     }
     if (logger.isDebugEnabled()) {
       logger.debug("resetting Amounts for expired second index:" + currentSecond);

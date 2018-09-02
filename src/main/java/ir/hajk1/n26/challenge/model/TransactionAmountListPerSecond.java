@@ -1,8 +1,5 @@
 package ir.hajk1.n26.challenge.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Author: <a href="mailto:k1.tehrani@gmail.com">Kayvan Tehrani</a>
  *
@@ -10,24 +7,40 @@ import java.util.List;
  */
 public class TransactionAmountListPerSecond {
 
-  private List<Double> amountList = new ArrayList<>();
+    private long transactionCount;
     private Double totalAmountPerSecond;
-    private Double minAmountPerSecond;
+    private Double minAmountPerSecond = Double.MIN_VALUE;
     private Double maxAmountPerSecond;
 
-  public List<Double> getAmountList() {
-    return amountList;
-  }
+    public long getTransactionCount() {
+        return transactionCount;
+    }
 
-  public void setAmountList(List<Double> amountList) {
-    this.amountList = amountList;
-  }
+    public Double getTotalAmountPerSecond() {
+        return totalAmountPerSecond;
+    }
+
+    public Double getMinAmountPerSecond() {
+        return minAmountPerSecond;
+    }
+
+    public Double getMaxAmountPerSecond() {
+        return maxAmountPerSecond;
+    }
 
     synchronized public void addNewTransaction(Double newAmount) {
+        transactionCount++;
         totalAmountPerSecond += newAmount;
         if (newAmount > maxAmountPerSecond)
             maxAmountPerSecond = newAmount;
         if (newAmount < minAmountPerSecond)
             minAmountPerSecond = newAmount;
+    }
+
+    public void reset() {
+        transactionCount = 0;
+        totalAmountPerSecond = 0d;
+        minAmountPerSecond = Double.MIN_VALUE;
+        maxAmountPerSecond = 0d;
     }
 }

@@ -1,14 +1,14 @@
 package ir.hajk1.n26.challenge.service;
 
+import ir.hajk1.n26.challenge.model.EnquiryResult;
 import ir.hajk1.n26.challenge.model.TransactionAmountListPerSecond;
-import java.util.Arrays;
-import java.util.DoubleSummaryStatistics;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by k1 on 6/30/18.
@@ -32,22 +32,25 @@ public class StatisticsServiceImpl implements StatisticService {
    * @return DoubleSummaryStatistics which contains desired information
    */
   @Override
-  public DoubleSummaryStatistics getStatistics() {
+  public EnquiryResult getStatistics() {
     List<TransactionAmountListPerSecond> list = Arrays
         .asList(transactionService.getTransactionAmountListPerSeconds());
-    List<Double> validTransactions = list.stream()
-        .flatMap(f -> f.getAmountList()
-            .stream())
-        .collect(Collectors.toList());
+    EnquiryResult enquiryResult = new EnquiryResult();
+    list.stream().forEach(p -> {
+      enquiryResult.addCount(p.getTransactionCount());
+      enquiryResult.addSum(p.getTotalAmountPerSecond());
+      enquiryResult.checkMax(p.getMaxAmountPerSecond());
+      enquiryResult.chekMin(p.getMinAmountPerSecond());
+    });
 
-    if (validTransactions == null || validTransactions.isEmpty()) {
-      return null;
-    }
-    DoubleSummaryStatistics summaryStatistics = validTransactions
-        .parallelStream().collect(Collectors.summarizingDouble(Double::doubleValue));
+//    if (validTransactions == null || validTransactions.isEmpty()) {
+//      return null;
+//    }
+//    DoubleSummaryStatistics summaryStatistics = validTransactions
+//        .parallelStream().collect(Collectors.summarizingDouble(Double::doubleValue));
     if (logger.isInfoEnabled()) {
-      logger.info("summaryStatistics=" + summaryStatistics);
+      logger.info("summaryStatistics=" + enquiryResult);
     }
-    return summaryStatistics;
+    return enquiryResult;
   }
 }
