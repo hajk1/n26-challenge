@@ -6,9 +6,9 @@ package ir.hajk1.n26.challenge.model;
  */
 public class EnquiryResult {
     private long count;
-    private Double sum;
-    private Double min;
-    private Double max;
+    private double sum;
+    private double min;
+    private double max;
 
     public long getCount() {
         return count;
@@ -18,32 +18,32 @@ public class EnquiryResult {
         this.count = count;
     }
 
-    public Double getSum() {
+    public double getSum() {
         return sum;
     }
 
-    public void setSum(Double sum) {
+    public void setSum(double sum) {
         this.sum = sum;
     }
 
-    public Double getMin() {
+    public double getMin() {
         return min;
     }
 
-    public void setMin(Double min) {
+    public void setMin(double min) {
         this.min = min;
     }
 
-    public Double getMax() {
+    public double getMax() {
         return max;
     }
 
-    public void setMax(Double max) {
+    public void setMax(double max) {
         this.max = max;
     }
 
     public double getAvg() {
-        return sum / count;
+        return count == 0 ? 0 : sum / count;
     }
 
     public void addCount(long transactionCount) {
@@ -60,6 +60,8 @@ public class EnquiryResult {
     }
 
     public void chekMin(Double minAmountPerSecond) {
+        if (this.min == 0)
+            this.min = minAmountPerSecond;
         if (minAmountPerSecond < this.min)
             this.min = minAmountPerSecond;
     }

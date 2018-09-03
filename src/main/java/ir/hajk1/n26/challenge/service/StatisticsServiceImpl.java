@@ -17,40 +17,41 @@ import java.util.List;
 @Service
 public class StatisticsServiceImpl implements StatisticService {
 
-  private static final Logger logger = LoggerFactory.getLogger(StatisticsServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(StatisticsServiceImpl.class);
 
-  private final TransactionService transactionService;
+    private final TransactionService transactionService;
 
-  @Autowired
-  public StatisticsServiceImpl(TransactionService transactionService) {
-    this.transactionService = transactionService;
-  }
+    @Autowired
+    public StatisticsServiceImpl(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 
-  /**
-   * Used for generating statistics
-   *
-   * @return DoubleSummaryStatistics which contains desired information
-   */
-  @Override
-  public EnquiryResult getStatistics() {
-    List<TransactionAmountListPerSecond> list = Arrays
-        .asList(transactionService.getTransactionAmountListPerSeconds());
-    EnquiryResult enquiryResult = new EnquiryResult();
-    list.stream().forEach(p -> {
-      enquiryResult.addCount(p.getTransactionCount());
-      enquiryResult.addSum(p.getTotalAmountPerSecond());
-      enquiryResult.checkMax(p.getMaxAmountPerSecond());
-      enquiryResult.chekMin(p.getMinAmountPerSecond());
-    });
+    /**
+     * Used for generating statistics
+     *
+     * @return DoubleSummaryStatistics which contains desired information
+     */
+    @Override
+    public EnquiryResult getStatistics() {
+        List<TransactionAmountListPerSecond> list = Arrays
+                .asList(transactionService.getTransactionAmountListPerSeconds());
+        EnquiryResult enquiryResult = new EnquiryResult();
+        list.stream().filter(p -> p.getTransactionCount() > 0)
+                .forEach(p -> {
+                    enquiryResult.addCount(p.getTransactionCount());
+                    enquiryResult.addSum(p.getTotalAmountPerSecond());
+                    enquiryResult.checkMax(p.getMaxAmountPerSecond());
+                    enquiryResult.chekMin(p.getMinAmountPerSecond());
+                });
 
 //    if (validTransactions == null || validTransactions.isEmpty()) {
 //      return null;
 //    }
 //    DoubleSummaryStatistics summaryStatistics = validTransactions
 //        .parallelStream().collect(Collectors.summarizingDouble(Double::doubleValue));
-    if (logger.isInfoEnabled()) {
-      logger.info("summaryStatistics=" + enquiryResult);
+        if (logger.isInfoEnabled()) {
+            logger.info("summaryStatistics=" + enquiryResult);
+        }
+        return enquiryResult;
     }
-    return enquiryResult;
-  }
 }

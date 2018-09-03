@@ -2,14 +2,14 @@ package ir.hajk1.n26.challenge.model;
 
 /**
  * Author: <a href="mailto:k1.tehrani@gmail.com">Kayvan Tehrani</a>
- *
+ * <p>
  * Description: <the description of the class for java doc by those that might use it, please use html if possible>
  */
 public class TransactionAmountListPerSecond {
 
     private long transactionCount;
     private Double totalAmountPerSecond;
-    private Double minAmountPerSecond = Double.MIN_VALUE;
+    private Double minAmountPerSecond;
     private Double maxAmountPerSecond;
 
     public long getTransactionCount() {
@@ -21,7 +21,7 @@ public class TransactionAmountListPerSecond {
     }
 
     public Double getMinAmountPerSecond() {
-        return minAmountPerSecond;
+        return minAmountPerSecond < 0 ? 0 : minAmountPerSecond;
     }
 
     public Double getMaxAmountPerSecond() {
@@ -33,14 +33,16 @@ public class TransactionAmountListPerSecond {
         totalAmountPerSecond += newAmount;
         if (newAmount > maxAmountPerSecond)
             maxAmountPerSecond = newAmount;
-        if (newAmount < minAmountPerSecond)
+        if (minAmountPerSecond == null || minAmountPerSecond == 0)
+            minAmountPerSecond = newAmount;
+        else if (newAmount < minAmountPerSecond)
             minAmountPerSecond = newAmount;
     }
 
     public void reset() {
         transactionCount = 0;
         totalAmountPerSecond = 0d;
-        minAmountPerSecond = Double.MIN_VALUE;
+        minAmountPerSecond = 0d;
         maxAmountPerSecond = 0d;
     }
 }
