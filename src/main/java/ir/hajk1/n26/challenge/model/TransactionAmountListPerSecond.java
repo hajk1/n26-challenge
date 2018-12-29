@@ -8,9 +8,9 @@ package ir.hajk1.n26.challenge.model;
 public class TransactionAmountListPerSecond {
 
     private long transactionCount;
-    private Double totalAmountPerSecond;
-    private Double minAmountPerSecond;
-    private Double maxAmountPerSecond;
+    private Double totalAmountPerSecond = 0d;
+    private Double minAmountPerSecond = 0d;
+    private Double maxAmountPerSecond = 0d;
 
     public long getTransactionCount() {
         return transactionCount;

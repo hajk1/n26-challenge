@@ -65,4 +65,14 @@ public class EnquiryResult {
         if (minAmountPerSecond < this.min)
             this.min = minAmountPerSecond;
     }
+
+  @Override
+  public String toString() {
+    return "EnquiryResult{" +
+        "count=" + count +
+        ", sum=" + sum +
+        ", min=" + min +
+        ", max=" + max +
+        '}';
+  }
 }
